@@ -4,11 +4,16 @@ const path = require('path');
 const html = fs.readFileSync(path.resolve(__dirname, './index.html'), 'utf8');
 
 jest.dontMock('fs');
+let events;
 
 describe('math', function () {
     beforeEach(() => {
         document.documentElement.innerHTML = html.toString();
-        math = require('mathjs')
+        math = require('mathjs');
+
+        document.addEventListener = jest.fn((event, cb) => {
+            events[event] = cb;
+        });
     });
     afterEach(() => {
         jest.resetModules();
@@ -66,7 +71,20 @@ describe('math', function () {
         clr();
         expect(document.getElementById("result").value).toEqual('')
 
-    })
+    });
+
+    it('function on enter work', (done) => {
+        const { dis, solve, clr } = require('./index.js');
+        const cal = document.getElementById("calcu");
+        dis('5');
+        dis('*');
+        dis('5');
+
+        const event = new KeyboardEvent('keyup', { keyCode: 13 });
+        cal.dispatchEvent(event);
+        // events.keydown({ keyCode: 13 })
+        done()
+    });
 })
 
 

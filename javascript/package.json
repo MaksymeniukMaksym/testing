@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --env=jsdom",
-    "coverage": "jest --coverage"
+    "coverage": "jest  --env=jsdom --coverage"
   },
   "dependencies": {
     "mathjs": "^11.3.1"
